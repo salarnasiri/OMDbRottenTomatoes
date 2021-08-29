@@ -1,7 +1,11 @@
+"""
+Fetches rotten tomatoes from http://www.omdbapi.com/ website
+"""
+
 import argparse
-import sys, os
+import sys
+import os
 import requests
-import json
 
 #consts
 VERSION = '0.0.1'
@@ -12,32 +16,45 @@ apikey =  os.environ.get('API_KEY')
 if not apikey:
     sys.exit("Please set API_KEY environment variable first")
 
-def requester(get_args: dict):
+def requester(get_args: dict) -> dict:
+    """
+    Appends apikey to the params and requests to the url
+    """
     get_args.update(dict(apikey = apikey))
-    r = requests.get(URL, params = get_args)
-    return r.json()
+    response = requests.get(URL, params = get_args)
+    return response.json()
 
-def rottenRateFetcher(imdbID: str):
-    movie = requester(dict(i = imdbID))
+def rotten_rate_fetcher(imdb_id: str) -> int:
+    """
+    Fetches the rotten tomatoes removes % and also will return None if no rotten tomatoes found
+    """
+    movie = requester(dict(i = imdb_id))
     for rate in movie["Ratings"]:
         if "Rotten Tomatoes" in rate["Source"]:
             return int(rate["Value"][:-1])
+    return None
 
-def populate(json_response: list):
+def populate(json_response: list) -> list:
+    """
+    Creates a list for output
+    """
     output = []
     for movie in json_response:
-        imdbID = movie["imdbID"]
+        imdb_id = movie["imdbID"]
         output.append(dict(
             title = movie["Title"],
-            imdbID = imdbID,
-            rottenTomatoesPercentage = rottenRateFetcher(imdbID)
+            imdbID = imdb_id,
+            rottenTomatoesPercentage = rotten_rate_fetcher(imdb_id)
             ))
     return output
 
-def prettyPrint(output: list):
-    for op in output:
-        for movie in op.items():
-            print(movie[0]+":", movie[1])
+def pretty_print(output: list):
+    """
+    Human readable print for output
+    """
+    for movie in output:
+        for item in movie.items():
+            print(item[0]+":", item[1])
         print()
 
 #argParser
@@ -56,4 +73,4 @@ arg_parser.add_argument(
 args = arg_parser.parse_args()
 
 movies = requester(dict(s = args.name))
-prettyPrint(populate(movies["Search"]))
+pretty_print(populate(movies["Search"]))
