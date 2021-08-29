@@ -16,5 +16,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag rotten:$GITHUB_SHA
-    - name: Test output
+    - name: Sample human readable output
       run: docker run --rm -e API_KEY=${{ secrets.API_KEY }} rotten:$GITHUB_SHA "Guardians of the Galaxy Vol. 2"
+    - name: Sample json output
+      run: docker run --rm -e API_KEY=${{ secrets.API_KEY }} rotten:$GITHUB_SHA "Guardians of the Galaxy Vol. 2" --json
+
