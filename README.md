@@ -7,4 +7,6 @@ sample usage:
 ```bash
 docker run -t rotten .
 docker run --rm rotten "Guardians of the Galaxy Vol. 2"
+docker run --rm rotten "Guardians of the Galaxy Vol. 2" -j
 ```
+

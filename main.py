@@ -70,7 +70,17 @@ arg_parser.add_argument(
     type = str,
     help = 'the name of the movie for search')
 
+arg_parser.add_argument(
+    '-j',
+    '--json',
+    action="store_true",
+    help = 'json output')
+
 args = arg_parser.parse_args()
 
-movies = requester(dict(s = args.name))
-pretty_print(populate(movies["Search"]))
+if __name__ == '__main__':
+    movies = requester(dict(s = args.name))
+    if args.json:
+        print(populate(movies["Search"]))
+    else:
+        pretty_print(populate(movies["Search"]))
