@@ -3,7 +3,8 @@ This is a command line interface to fetch movies rotten tomatoes rate from this 
 
 you need to pass your `API_KEY` as an Environment Varible to the code to work.
 
-sample command:
+sample usage:
 ```bash
-python main.py "Guardians of the Galaxy Vol. 2"
+docker run -t rotten .
+docker run --rm rotten "Guardians of the Galaxy Vol. 2"
 ```
